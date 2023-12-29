@@ -1,0 +1,36 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Building {
+  id          Int          @id @default(autoincrement())
+  name        String
+  Restaurant  Restaurant[]
+}
+
+model Restaurant {
+  id         Int     @id @default(autoincrement())
+  name       String
+  Buildingid Int
+  Building   Building @relation(fields: [Buildingid], references: [id])
+  Billid     Int
+  Bill       Bill[]
+}
+
+model Bill {
+  id            Int        @id @default(autoincrement())
+  Date   DateTime 
+  start         Int
+  end           Int
+  Restaurantid  Int
+  mea           Float
+  sch           Float 
+  Restaurant    Restaurant @relation(fields: [Restaurantid], references: [id])
+}
