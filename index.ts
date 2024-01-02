@@ -18,7 +18,11 @@ app.get('/building', async (req: Request, res: Response) => {
             include: {
                 Restaurant: {
                 include: {
-                    Bill: true,
+                    Bill: {
+                        orderBy: {
+                            Date: 'desc'
+                        }
+                    }
                 }
             }
         }
@@ -145,7 +149,10 @@ app.get('/getbillrestaurant/:id', async (req: Request, res: Response) => {
         const bills = await prisma.Bill.findMany({
             where: {
                 Restaurantid: parseInt(id)
-            }
+              },
+              orderBy: {
+                  Date: 'asc' // 'asc' for ascending, 'desc' for descending
+              }
         });
 
         const updatedBills = bills.map((bill:Bill) => ({
@@ -215,6 +222,6 @@ app.post('/updatebillres', async (req:Request, res:Response) => {
     }
   });
 
-app.listen(process.env.PORT, () => {
+app.listen(3003, () => {
     console.log('Example app listening on port', process.env.PORT);
 })
